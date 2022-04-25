@@ -16,8 +16,9 @@ namespace MisskeyCommentViewer
 	public partial class MisskeyCommentViewer : Form
 	{
 		private CommentScreen CommentScrean;
-		private Misskey misskey;
+		private Misskey misskey = new Misskey();
 		private ImageList ImageList = new ImageList();
+		private Bouyomichan bouyomichan = new Bouyomichan();
 		private ListViewItem listViewItemtemp = new ListViewItem();
 		public MisskeyCommentViewer()
 		{
@@ -64,7 +65,6 @@ namespace MisskeyCommentViewer
 
 		private void ConnectButton_Click(object sender, EventArgs e)
 		{
-			misskey = new Misskey();
 			misskey.ReceiveLiveComment += Misskey_ReceiveLiveComment;
 			misskey.livetag = "ml" + MisskeyID.Text.ToLower();
 			misskey.ConnectAsync();
@@ -115,6 +115,10 @@ namespace MisskeyCommentViewer
 			listViewItemtemp.SubItems.Add(json.body.body.user.name);
 			listViewItemtemp.SubItems.Add(Text);
 
+			if (Bouyomichan.Checked)
+			{
+				bouyomichan.Speak(Text);
+			}
 
 			if (InvokeRequired)
 			{
@@ -159,6 +163,14 @@ namespace MisskeyCommentViewer
 		private void MisskeyID_Leave(object sender, EventArgs e)
 		{
 			misskey.livetag = MisskeyID.Text;
+		}
+
+		private void Bouyomichan_CheckedChanged(object sender, EventArgs e)
+		{
+			if (Bouyomichan.Checked)
+			{
+				bouyomichan.Start();
+			}
 		}
 	}
 }

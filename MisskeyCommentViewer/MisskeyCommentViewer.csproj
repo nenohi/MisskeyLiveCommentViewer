@@ -150,6 +150,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bouyomichan.cs" />
     <Compile Include="MisskeyCommentViewer.cs">
       <SubType>Form</SubType>
     </Compile>

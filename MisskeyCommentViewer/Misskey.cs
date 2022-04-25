@@ -45,9 +45,12 @@ namespace MisskeyCommentViewer
 
 		private void WebSocket_Opened(object sender, EventArgs e)
 		{
-				MisskeyConnectObj senddata = new MisskeyConnectObj() { body = new MisskeyConnectBody() { channel = "globalTimeline", id = "3" }, type = "connect" };
-				string senddata_json = JsonConvert.SerializeObject(senddata);
-				WebSocket.Send(senddata_json);
+			MisskeyConnectObj senddata = new MisskeyConnectObj() { body = new MisskeyConnectBody() { channel = "hashtag", id = "3" }, type = "connect"};
+			senddata.body.param = new Dictionary<string, List<List<string>>>();
+			senddata.body.param.Add("q", new List<List<string>> { new List<string> { livetag } });
+			string senddata_json = JsonConvert.SerializeObject(senddata);
+			
+			WebSocket.Send(senddata_json);
 			Console.WriteLine(sender.ToString());
 		}
 
@@ -113,6 +116,8 @@ namespace MisskeyCommentViewer
 		public string channel { get; set; } = string.Empty;
 		[JsonProperty("id")]
 		public string id { get; set; } = string.Empty;
+		[JsonProperty("params")]
+		public Dictionary<string, List<List<string>>> param;
 	}
 	public class MisskeyReceiveObj
 	{

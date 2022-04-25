@@ -33,6 +33,7 @@
 			this.ShowCommentWindow = new System.Windows.Forms.CheckBox();
 			this.ScreenDisplay = new System.Windows.Forms.ComboBox();
 			this.MisskeyID = new System.Windows.Forms.TextBox();
+			this.Bouyomichan = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// listView1
@@ -76,7 +77,7 @@
 			// 
 			this.ScreenDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.ScreenDisplay.FormattingEnabled = true;
-			this.ScreenDisplay.Location = new System.Drawing.Point(648, 61);
+			this.ScreenDisplay.Location = new System.Drawing.Point(648, 34);
 			this.ScreenDisplay.Name = "ScreenDisplay";
 			this.ScreenDisplay.Size = new System.Drawing.Size(140, 20);
 			this.ScreenDisplay.TabIndex = 3;
@@ -91,11 +92,23 @@
 			this.MisskeyID.TabIndex = 4;
 			this.MisskeyID.Leave += new System.EventHandler(this.MisskeyID_Leave);
 			// 
+			// Bouyomichan
+			// 
+			this.Bouyomichan.AutoSize = true;
+			this.Bouyomichan.Location = new System.Drawing.Point(648, 118);
+			this.Bouyomichan.Name = "Bouyomichan";
+			this.Bouyomichan.Size = new System.Drawing.Size(92, 16);
+			this.Bouyomichan.TabIndex = 5;
+			this.Bouyomichan.Text = "Bouyomichan";
+			this.Bouyomichan.UseVisualStyleBackColor = true;
+			this.Bouyomichan.CheckedChanged += new System.EventHandler(this.Bouyomichan_CheckedChanged);
+			// 
 			// MisskeyCommentViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.Bouyomichan);
 			this.Controls.Add(this.MisskeyID);
 			this.Controls.Add(this.ScreenDisplay);
 			this.Controls.Add(this.ShowCommentWindow);
@@ -115,6 +128,7 @@
 		private System.Windows.Forms.CheckBox ShowCommentWindow;
 		private System.Windows.Forms.ComboBox ScreenDisplay;
 		private System.Windows.Forms.TextBox MisskeyID;
+		private System.Windows.Forms.CheckBox Bouyomichan;
 	}
 }
 
