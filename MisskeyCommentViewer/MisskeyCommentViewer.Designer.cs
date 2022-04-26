@@ -34,6 +34,10 @@
 			this.ScreenDisplay = new System.Windows.Forms.ComboBox();
 			this.MisskeyID = new System.Windows.Forms.TextBox();
 			this.Bouyomichan = new System.Windows.Forms.CheckBox();
+			this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+			this.button1 = new System.Windows.Forms.Button();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// listView1
@@ -103,11 +107,31 @@
 			this.Bouyomichan.UseVisualStyleBackColor = true;
 			this.Bouyomichan.CheckedChanged += new System.EventHandler(this.Bouyomichan_CheckedChanged);
 			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(705, 202);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(83, 23);
+			this.button1.TabIndex = 6;
+			this.button1.Text = "ChangeColor";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Location = new System.Drawing.Point(648, 202);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(51, 23);
+			this.pictureBox1.TabIndex = 7;
+			this.pictureBox1.TabStop = false;
+			// 
 			// MisskeyCommentViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.pictureBox1);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.Bouyomichan);
 			this.Controls.Add(this.MisskeyID);
 			this.Controls.Add(this.ScreenDisplay);
@@ -116,6 +140,7 @@
 			this.Controls.Add(this.listView1);
 			this.Name = "MisskeyCommentViewer";
 			this.Text = "MisskeyCommentViewer";
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -129,6 +154,9 @@
 		private System.Windows.Forms.ComboBox ScreenDisplay;
 		private System.Windows.Forms.TextBox MisskeyID;
 		private System.Windows.Forms.CheckBox Bouyomichan;
+		private System.Windows.Forms.ColorDialog colorDialog1;
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
 

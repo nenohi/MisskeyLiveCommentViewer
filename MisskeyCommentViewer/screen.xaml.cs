@@ -36,6 +36,7 @@ namespace MisskeyCommentViewer
 		int[] uetextcnt = new int[25];
 		int[] nakatextcnt = new int[25];
 		int[] shitatextcnt = new int[25];
+		public System.Windows.Media.Brush TextColor = System.Windows.Media.Brushes.White;
 
 		#region DependencyProperties
 

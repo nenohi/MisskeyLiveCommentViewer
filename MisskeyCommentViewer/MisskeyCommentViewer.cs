@@ -172,5 +172,15 @@ namespace MisskeyCommentViewer
 				bouyomichan.Start();
 			}
 		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			if (colorDialog1.ShowDialog() == DialogResult.OK)
+			{
+				var mediacolor = System.Windows.Media.Color.FromArgb(colorDialog1.Color.A, colorDialog1.Color.R, colorDialog1.Color.G, colorDialog1.Color.B);
+				CommentScrean.TextColor = new System.Windows.Media.SolidColorBrush(mediacolor);
+				pictureBox1.BackColor = colorDialog1.Color;
+			}
+		}
 	}
 }
