@@ -50,6 +50,11 @@ namespace MisskeyCommentViewer
 
 		private void ShowCommentWindow_CheckedChanged(object sender, EventArgs e)
 		{
+			if(ScreenDisplay.SelectedItem == null)
+			{
+				ShowCommentWindow.Checked = false;
+				return;
+			}
 			if (ShowCommentWindow.Checked)
 			{
 				CommentScrean.Visibility = System.Windows.Visibility.Visible;
@@ -88,8 +93,7 @@ namespace MisskeyCommentViewer
 			misskey.ReceiveLiveComment += Misskey_ReceiveLiveComment;
 			misskey.livetag = "ml" + id;
 			misskey.ConnectAsync();
-
-		}
+        }
 		private async void Misskey_ReceiveLiveComment(object sender, EventArgs e)
 		{
 			if (ShowCommentWindow.Checked)
@@ -137,7 +141,8 @@ namespace MisskeyCommentViewer
 				listView1.SmallImageList = ImageList;
 				listView1.Items.Add(listViewItemtemp);
 				listView1.Update();
-				listViewItemtemp = null;
+                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+                listViewItemtemp = null;
 			}
 		}
 		public Task ViewImageURL(string url, string username)
