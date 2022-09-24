@@ -113,7 +113,8 @@ namespace MisskeyCommentViewer
 
 			if (Bouyomichan.Checked)
 			{
-				bouyomichan.Speak(Text);
+				string bouyomi = Regex.Replace(Text, @"(#[a-z|A-Z]*)", "");
+                bouyomichan.Speak(bouyomi);
 			}
 
 			if (InvokeRequired)
