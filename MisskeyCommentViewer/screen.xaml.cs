@@ -271,10 +271,7 @@ namespace MisskeyCommentViewer
 			//string str = System.Text.Encoding.GetEncoding(932).GetString(message.Byt);
 			//string str1 = System.Text.Encoding.UTF8.GetString(message.Byt);
 			string Text = message.body.body.text;
-			foreach (string tag in message.body.body.tags)
-			{
-				Text = Text.Replace("#" + tag, "");
-			}
+			Text = Regex.Replace(Text,@"(#[a-z|A-Z]*)","");
 			Text = Regex.Replace(Text, regex, "");
 			Text = Text.Trim();
 
