@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -102,10 +102,6 @@ namespace MisskeyCommentViewer
 			await ViewImageURL(json.body.body.user.avatarUrl, json.body.body.user.username);
 			string Text = json.body.body.text;
 			string regex = @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)";
-			foreach (string tag in json.body.body.tags)
-			{
-				Text = Text.Replace("#" + tag, "");
-			}
 			Text = Regex.Replace(Text, regex, "");
 			Text = Text.Trim();
 			string[] item = { json.body.body.user.username, json.body.body.user.name, json.body.body.user.username, Text };
