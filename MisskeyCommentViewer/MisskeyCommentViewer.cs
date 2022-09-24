@@ -104,7 +104,7 @@ namespace MisskeyCommentViewer
 				});
 			}
 			var json = JsonConvert.DeserializeObject<MisskeyReceiveObj>(sender.ToString());
-			if (checkBox1.Checked && !ImageList.Images.Keys.Contains(json.body.body.user.username))
+			if (!ImageList.Images.Keys.Contains(json.body.body.user.username))
 			{
 				await ViewImageURL(json.body.body.user.avatarUrl, json.body.body.user.username);
 			}
