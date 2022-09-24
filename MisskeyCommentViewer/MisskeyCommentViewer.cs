@@ -65,8 +65,31 @@ namespace MisskeyCommentViewer
 
 		private void ConnectButton_Click(object sender, EventArgs e)
 		{
+			string misskeyidtext = MisskeyID.Text.ToLower();
+			string id="";
+			Uri uri;
+			bool isurl = Uri.TryCreate(misskeyidtext, UriKind.Absolute,out uri);
+			if (isurl)
+			{
+				if(uri.Host == "live.misskey.io")
+				{
+					id = uri.Segments.Last().Replace("@","");
+                }
+				else
+				{
+
+				}
+			}else if (misskeyidtext.Contains("@"))
+			{
+				id = misskeyidtext.Replace("@", "");
+			}
+			else
+			{
+				id = misskeyidtext;
+			}
+			misskey.ReceiveLiveComment -= Misskey_ReceiveLiveComment;
 			misskey.ReceiveLiveComment += Misskey_ReceiveLiveComment;
-			misskey.livetag = "ml" + MisskeyID.Text.ToLower();
+			misskey.livetag = "ml" + id;
 			misskey.ConnectAsync();
 
 		}
