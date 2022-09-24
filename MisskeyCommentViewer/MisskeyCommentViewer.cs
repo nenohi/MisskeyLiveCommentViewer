@@ -14,7 +14,7 @@ namespace MisskeyCommentViewer
 	{
 		private CommentScreen CommentScrean;
 		private Misskey misskey = new Misskey();
-		private ImageList ImageList = new ImageList();
+		private ImageList ImageList = new ImageList() { ImageSize=new Size(50,50)};
 		private Bouyomichan bouyomichan = new Bouyomichan();
 		private ListViewItem listViewItemtemp = new ListViewItem();
 		public MisskeyCommentViewer()
@@ -33,7 +33,7 @@ namespace MisskeyCommentViewer
 
 			listView1.Columns.Add("icon", 50, HorizontalAlignment.Center);
 			listView1.Columns.Add("userid", 70, HorizontalAlignment.Left);
-			listView1.Columns.Add("comment", 500, HorizontalAlignment.Left);
+			listView1.Columns.Add("comment", 490, HorizontalAlignment.Left);
 
 			listView1.SmallImageList = ImageList;
 			listView1.Update();
@@ -89,25 +89,6 @@ namespace MisskeyCommentViewer
 			misskey.livetag = "ml" + id;
 			misskey.ConnectAsync();
 
-		}
-		Image createThumbnail(Image image, int w, int h)
-		{
-			Bitmap canvas = new Bitmap(w, h);
-
-            Graphics g = Graphics.FromImage(canvas);
-			g.FillRectangle(new SolidBrush(Color.White), 0, 0, w, h);
-
-			float fw = (float)w / (float)image.Width;
-			float fh = (float)h / (float)image.Height;
-
-			float scale = Math.Min(fw, fh);
-			fw = image.Width * scale;
-			fh = image.Height * scale;
-
-			g.DrawImage(image, (w - fw) / 2, (h - fh) / 2, fw, fh);
-			g.Dispose();
-
-			return canvas;
 		}
 		private async void Misskey_ReceiveLiveComment(object sender, EventArgs e)
 		{

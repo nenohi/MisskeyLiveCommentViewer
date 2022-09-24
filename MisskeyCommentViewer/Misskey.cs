@@ -66,7 +66,7 @@ namespace MisskeyCommentViewer
 			MisskeyReceiveObj misskeyReceiveObj = JsonConvert.DeserializeObject<MisskeyReceiveObj>(txt);
 			bool tagflag = false;
 			if (misskeyReceiveObj == null) return;
-			if (misskeyReceiveObj.body.body.text == String.Empty) return;
+			if (misskeyReceiveObj.body.body.text == String.Empty || misskeyReceiveObj.body.body.text == null) return;
 			if (misskeyReceiveObj.body.body.tags.Count == 0) return;
 			foreach (string tag in misskeyReceiveObj.body.body.tags)
 			{
