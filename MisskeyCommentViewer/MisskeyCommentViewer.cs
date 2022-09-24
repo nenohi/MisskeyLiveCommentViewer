@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
 
 namespace MisskeyCommentViewer
 {
@@ -20,7 +21,7 @@ namespace MisskeyCommentViewer
 		{
 			InitializeComponent();
 			ScreenDisplay.DisplayMember = "DeviceName";
-			foreach (System.Windows.Forms.Screen s in Screen.AllScreens)
+			foreach (Screen s in Screen.AllScreens)
 			{
 				if (s != null)
 				{
@@ -30,7 +31,7 @@ namespace MisskeyCommentViewer
 			CommentScrean = new CommentScreen();
 			CommentScrean.Visibility = System.Windows.Visibility.Hidden;
 
-			listView1.Columns.Add("", 50, HorizontalAlignment.Center);
+			listView1.Columns.Add("icon", 50, HorizontalAlignment.Center);
 			listView1.Columns.Add("userid", 70, HorizontalAlignment.Left);
 			listView1.Columns.Add("comment", 500, HorizontalAlignment.Left);
 
@@ -93,7 +94,7 @@ namespace MisskeyCommentViewer
 		{
 			Bitmap canvas = new Bitmap(w, h);
 
-			Graphics g = Graphics.FromImage(canvas);
+            Graphics g = Graphics.FromImage(canvas);
 			g.FillRectangle(new SolidBrush(Color.White), 0, 0, w, h);
 
 			float fw = (float)w / (float)image.Width;
@@ -118,7 +119,10 @@ namespace MisskeyCommentViewer
 				});
 			}
 			var json = JsonConvert.DeserializeObject<MisskeyReceiveObj>(sender.ToString());
-			await ViewImageURL(json.body.body.user.avatarUrl, json.body.body.user.username);
+			if (checkBox1.Checked && !ImageList.Images.Keys.Contains(json.body.body.user.username))
+			{
+				await ViewImageURL(json.body.body.user.avatarUrl, json.body.body.user.username);
+			}
 			string Text = json.body.body.text;
 			string regex = @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)";
 			Text = Regex.Replace(Text, regex, "");
@@ -129,7 +133,6 @@ namespace MisskeyCommentViewer
 			listViewItemtemp.ImageKey = json.body.body.user.username;
 			listViewItemtemp.SubItems.Add(json.body.body.user.name);
 			listViewItemtemp.SubItems.Add(Text);
-
 			if (Bouyomichan.Checked)
 			{
 				string bouyomi = Regex.Replace(Text, @"(#[a-z|A-Z]*)", "");
@@ -151,29 +154,54 @@ namespace MisskeyCommentViewer
 			if (listViewItemtemp != null)
 			{
 				listView1.SmallImageList = ImageList;
-				listView1.Items.Insert(0, listViewItemtemp);
+				listView1.Items.Add(listViewItemtemp);
 				listView1.Update();
 				listViewItemtemp = null;
 			}
 		}
-		public async Task ViewImageURL(string url, string username)
+		public Task ViewImageURL(string url, string username)
 		{
-			using (var web = new System.Net.Http.HttpClient())
-			{
-				var bytes = await web.GetByteArrayAsync(url).ConfigureAwait(false);
-				using (var stream = new System.IO.MemoryStream(bytes))
+			try
+            {
+				var iurl = new Uri(url);
+				var iurlSegments = iurl.Segments[iurl.Segments.Length - 1].Split('.');
+				var filetype = iurlSegments[iurlSegments.Length - 1].ToLower();
+				if (filetype == "webp")
 				{
-					var bitmapimage = new BitmapImage();
-					bitmapimage.BeginInit();
-					bitmapimage.StreamSource = stream;
-					bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-					bitmapimage.EndInit();
-					bitmapimage.Freeze();
-					Image bitmap = Bitmap.FromStream(stream);
-					ImageList.Images.Add(username, bitmap);
-					bitmap.Dispose();
+                    using (var web = new WebClient())
+                    {
+						Image image = null;
+                        var bytes = web.DownloadData(new Uri(url));
+                        using (Stream stream = new MemoryStream(bytes))
+                        {
+                            ImageProcessor.Plugins.WebP.Imaging.Formats.WebPFormat format = new ImageProcessor.Plugins.WebP.Imaging.Formats.WebPFormat();
+							image = format.Load(stream);
+							
+							ImageList.Images.Add(username,image);
+                        }
+						if (image == null) image.Dispose();
+                    }
+                }
+				else
+				{
+					using (var web = new WebClient())
+					{
+						var bytes = web.DownloadData(new Uri(url));
+						using (Stream stream = new MemoryStream(bytes))
+						{
+							Image img = Image.FromStream(stream);
+							ImageList.Images.Add(username, img);
+							img.Dispose();
+						}
+					}
 				}
-			}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+			return Task.CompletedTask;
 		}
 
 		private void MisskeyID_Leave(object sender, EventArgs e)
@@ -198,5 +226,5 @@ namespace MisskeyCommentViewer
 				pictureBox1.BackColor = colorDialog1.Color;
 			}
 		}
-	}
+    }
 }

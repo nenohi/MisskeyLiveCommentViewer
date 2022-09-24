@@ -14,15 +14,13 @@ namespace MisskeyCommentViewer
 	{
 		public static ClientWebSocket ws = new ClientWebSocket();
 		public static WebSocket4Net.WebSocket WebSocket;
-		public event EventHandler<EventArgs> WebSocketReceive;
 		public event EventHandler<EventArgs> ReceiveLiveComment;
 		public string livetag = "";
-		private bool readrunning = false;
 		public Misskey()
 		{
 
 		}
-		public async Task ConnectAsync()
+		public void ConnectAsync()
 		{
 			if (WebSocket == null || WebSocket.State != WebSocket4Net.WebSocketState.Open)
 			{
@@ -56,7 +54,8 @@ namespace MisskeyCommentViewer
 
 		private void WebSocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
 		{
-			Console.WriteLine(e.Exception.Message);
+			ConnectAsync();
+            Console.WriteLine(e.Exception.Message);
 		}
 
 		private void WebSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
@@ -79,27 +78,6 @@ namespace MisskeyCommentViewer
 			if (tagflag)
 			{
 				eventHandler?.Invoke(txt, new EventArgs());
-			}
-		}
-
-		private void Misskey_WebSocketReceive(object sender, EventArgs e)
-		{
-			EventHandler<EventArgs> eventHandler = ReceiveLiveComment;
-			string txt = sender.ToString();
-			MisskeyReceiveObj misskeyReceiveObj = JsonConvert.DeserializeObject<MisskeyReceiveObj>(txt);
-			bool tagflag = false;
-			if (misskeyReceiveObj.body.body.text == String.Empty) return;
-			if (misskeyReceiveObj.body.body.tags.Count == 0) return;
-			foreach (string tag in misskeyReceiveObj.body.body.tags)
-			{
-				if (tag.ToLower() == livetag.ToLower())
-				{
-					tagflag = true;
-				}
-			}
-			if (tagflag)
-			{
-				eventHandler?.Invoke(sender, new EventArgs());
 			}
 		}
 	}
