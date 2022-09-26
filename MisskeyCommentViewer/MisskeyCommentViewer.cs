@@ -7,6 +7,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace MisskeyCommentViewer
 {
@@ -21,7 +22,7 @@ namespace MisskeyCommentViewer
 		{
 			InitializeComponent();
 			ScreenDisplay.DisplayMember = "DeviceName";
-			foreach (Screen s in Screen.AllScreens)
+            foreach (Screen s in Screen.AllScreens)
 			{
 				if (s != null)
 				{
@@ -30,22 +31,42 @@ namespace MisskeyCommentViewer
 			}
 			CommentScrean = new CommentScreen();
 			CommentScrean.Visibility = System.Windows.Visibility.Hidden;
-
 			listView1.Columns.Add("icon", 50, HorizontalAlignment.Center);
 			listView1.Columns.Add("userid", 70, HorizontalAlignment.Left);
 			listView1.Columns.Add("comment", 490, HorizontalAlignment.Left);
 
 			listView1.SmallImageList = ImageList;
 			listView1.Update();
+            button1.Enabled = false;
+            button2.Enabled = false;
+            pictureBox1.Enabled = false;
+            pictureBox2.Enabled = false;
 
-		}
+        }
 
 		private void ScreenDisplay_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			CommentScrean.Height = ((Screen)ScreenDisplay.SelectedItem).Bounds.Height;
-			CommentScrean.Width = ((Screen)ScreenDisplay.SelectedItem).Bounds.Width;
-			CommentScrean.Top = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.Y;
-			CommentScrean.Left = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.X;
+			if (!ShowCommentWindow.Checked) return;
+
+
+            if (ScreenDisplay.SelectedItem.GetType() == typeof(Screen))
+			{
+				if(CommentScrean.AllowsTransparency)
+				{
+                    CommentScrean.Height = ((Screen)ScreenDisplay.SelectedItem).Bounds.Height;
+                    CommentScrean.Width = ((Screen)ScreenDisplay.SelectedItem).Bounds.Width;
+                    CommentScrean.Top = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.Y;
+                    CommentScrean.Left = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.X;
+				}
+				else
+				{
+					WindowReOpen((Screen)ScreenDisplay.SelectedItem, true);
+                }
+			}
+			else
+			{
+				WindowReOpen((Screen)ScreenDisplay.Items[1], false);
+            }
 		}
 
 		private void ShowCommentWindow_CheckedChanged(object sender, EventArgs e)
@@ -57,12 +78,29 @@ namespace MisskeyCommentViewer
 			}
 			if (ShowCommentWindow.Checked)
 			{
-				CommentScrean.Visibility = System.Windows.Visibility.Visible;
-			}
+                if (ScreenDisplay.SelectedItem.GetType() == typeof(Screen))
+				{
+                    if (CommentScrean.AllowsTransparency)
+                    {
+                        CommentScrean.Height = ((Screen)ScreenDisplay.SelectedItem).Bounds.Height;
+                        CommentScrean.Width = ((Screen)ScreenDisplay.SelectedItem).Bounds.Width;
+                        CommentScrean.Top = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.Y;
+                        CommentScrean.Left = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.X;
+					}
+					else
+					{
+						WindowReOpen((Screen)ScreenDisplay.SelectedItem, true);
+					}
+                }
+				else
+				{
+					WindowReOpen((Screen)ScreenDisplay.Items[1], false);
+                }
+            }
 			else
 			{
-				CommentScrean.Visibility = System.Windows.Visibility.Hidden;
-			}
+				CommentScrean.Close();
+            }
 		}
 
 		private void ConnectButton_Click(object sender, EventArgs e)
@@ -118,6 +156,7 @@ namespace MisskeyCommentViewer
 			listViewItemtemp.ImageKey = json.body.body.user.username;
 			listViewItemtemp.SubItems.Add(json.body.body.user.name);
 			listViewItemtemp.SubItems.Add(Text);
+			
 			if (Bouyomichan.Checked)
 			{
 				string bouyomi = Regex.Replace(Text, @"(#[a-z|A-Z]*)", "");
@@ -203,6 +242,52 @@ namespace MisskeyCommentViewer
 			}
 		}
 
+		private System.Windows.Media.Brush DrawColorToBrush(System.Drawing.Color color)
+		{
+			var mediacolor = System.Windows.Media.Color.FromArgb(color.A,color.R, color.G, color.B);
+            return new System.Windows.Media.SolidColorBrush(mediacolor);
+        }
+		/// <summary>
+		/// CommentScreanを最初期化します
+		/// </summary>
+		/// <param name="screen">初期化先モニタ</param>
+		/// <param name="flag">透過するかどうか
+		/// true:透過
+		/// false:無透過
+		/// </param>
+		private void WindowReOpen(Screen screen,bool flag)
+		{
+            CommentScrean?.Close();
+            CommentScrean = new CommentScreen();
+			if (flag)
+			{
+				CommentScrean.WindowState = System.Windows.WindowState.Normal;
+				CommentScrean.WindowStyle = System.Windows.WindowStyle.None;
+			}
+			else
+			{
+				CommentScrean.WindowState = System.Windows.WindowState.Normal;
+				CommentScrean.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
+                CommentScrean.TextColor = DrawColorToBrush(pictureBox1.BackColor);
+                CommentScrean.Background = DrawColorToBrush(pictureBox2.BackColor);
+            }
+            CommentScrean.ChanegAllowsTransparency(flag);
+            CommentScrean.Visibility = System.Windows.Visibility.Visible;
+			CommentScrean.Topmost = !flag;
+            button1.Enabled = !flag;
+            button2.Enabled = !flag;
+            pictureBox1.Enabled = !flag;
+            pictureBox2.Enabled = !flag;
+			if (flag)
+			{
+				CommentScrean.Height = screen.Bounds.Height;
+				CommentScrean.Width = screen.Bounds.Width;
+				CommentScrean.Top = screen.Bounds.Location.Y;
+				CommentScrean.Left = screen.Bounds.Location.X;
+			}
+
+        }
+
 		private void button1_Click(object sender, EventArgs e)
 		{
 			if (colorDialog1.ShowDialog() == DialogResult.OK)
@@ -212,5 +297,15 @@ namespace MisskeyCommentViewer
 				pictureBox1.BackColor = colorDialog1.Color;
 			}
 		}
-    }
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                var mediacolor = System.Windows.Media.Color.FromArgb(colorDialog1.Color.A, colorDialog1.Color.R, colorDialog1.Color.G, colorDialog1.Color.B);
+                CommentScrean.Background = new System.Windows.Media.SolidColorBrush(mediacolor);
+                pictureBox2.BackColor = colorDialog1.Color;
+            }
+        }
+	}
 }
