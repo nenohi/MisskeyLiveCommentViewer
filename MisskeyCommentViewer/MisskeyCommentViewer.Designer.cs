@@ -105,6 +105,7 @@
             this.MisskeyID.Name = "MisskeyID";
             this.MisskeyID.Size = new System.Drawing.Size(140, 19);
             this.MisskeyID.TabIndex = 4;
+            this.MisskeyID.TextChanged += new System.EventHandler(this.MisskeyID_TextChanged);
             // 
             // Bouyomichan
             // 
