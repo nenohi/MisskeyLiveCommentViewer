@@ -42,6 +42,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.ActiveUserCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -63,7 +64,7 @@
             // ConnectButton
             // 
             this.ConnectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConnectButton.Location = new System.Drawing.Point(713, 415);
+            this.ConnectButton.Location = new System.Drawing.Point(713, 382);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(75, 23);
             this.ConnectButton.TabIndex = 1;
@@ -100,11 +101,10 @@
             // MisskeyID
             // 
             this.MisskeyID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.MisskeyID.Location = new System.Drawing.Point(648, 390);
+            this.MisskeyID.Location = new System.Drawing.Point(648, 357);
             this.MisskeyID.Name = "MisskeyID";
             this.MisskeyID.Size = new System.Drawing.Size(140, 19);
             this.MisskeyID.TabIndex = 4;
-            this.MisskeyID.Leave += new System.EventHandler(this.MisskeyID_Leave);
             // 
             // Bouyomichan
             // 
@@ -143,7 +143,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(646, 375);
+            this.label1.Location = new System.Drawing.Point(646, 342);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 12);
             this.label1.TabIndex = 8;
@@ -190,6 +190,16 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Background Color";
             // 
+            // ActiveUserCount
+            // 
+            this.ActiveUserCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ActiveUserCount.AutoSize = true;
+            this.ActiveUserCount.Location = new System.Drawing.Point(646, 426);
+            this.ActiveUserCount.Name = "ActiveUserCount";
+            this.ActiveUserCount.Size = new System.Drawing.Size(74, 12);
+            this.ActiveUserCount.TabIndex = 8;
+            this.ActiveUserCount.Text = "Active Users:";
+            // 
             // MisskeyCommentViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -197,6 +207,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.button2);
+            this.Controls.Add(this.ActiveUserCount);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -233,6 +244,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label ActiveUserCount;
     }
 }
 

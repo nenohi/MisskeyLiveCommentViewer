@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Drawing;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace MisskeyCommentViewer
 {
@@ -18,6 +19,8 @@ namespace MisskeyCommentViewer
 		private ImageList ImageList = new ImageList() { ImageSize=new Size(50,50)};
 		private Bouyomichan bouyomichan = new Bouyomichan();
 		private ListViewItem listViewItemtemp = new ListViewItem();
+		private string UserID { set; get; }
+		private DispatcherTimer timer;
 		public MisskeyCommentViewer()
 		{
 			InitializeComponent();
@@ -130,7 +133,9 @@ namespace MisskeyCommentViewer
 			misskey.ReceiveLiveComment -= Misskey_ReceiveLiveComment;
 			misskey.ReceiveLiveComment += Misskey_ReceiveLiveComment;
 			misskey.livetag = "ml" + id;
+			UserID = id;
 			misskey.ConnectAsync();
+			ActiveUserTimer();
         }
 		private async void Misskey_ReceiveLiveComment(object sender, EventArgs e)
 		{
@@ -228,12 +233,6 @@ namespace MisskeyCommentViewer
 
 			return Task.CompletedTask;
 		}
-
-		private void MisskeyID_Leave(object sender, EventArgs e)
-		{
-			misskey.livetag = MisskeyID.Text;
-		}
-
 		private void Bouyomichan_CheckedChanged(object sender, EventArgs e)
 		{
 			if (Bouyomichan.Checked)
@@ -307,5 +306,34 @@ namespace MisskeyCommentViewer
                 pictureBox2.BackColor = colorDialog1.Color;
             }
         }
+
+		private void ActiveUserTimer()
+		{
+			if(timer != null)
+			{
+				if (timer.IsEnabled)
+				{
+					timer.Stop();
+				}
+            }
+            timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(5000) };
+			timer.Tick += Timer_Tick;
+			timer.Start();
+        }
+
+		private void Timer_Tick(object sender, EventArgs e)
+		{
+            ActiveUserCount.Text = "Active Users:" + GetActiveUser().ToString();
+        }
+		private int GetActiveUser()
+		{
+			int activeusers=0;
+            WebRequest request = WebRequest.Create("https://livenow-6xpu3met.arkjp.net/?id="+UserID);
+            Stream response_stream = request.GetResponse().GetResponseStream();
+            StreamReader reader = new StreamReader(response_stream);
+            var obj_from_json = JObject.Parse(reader.ReadToEnd());
+			activeusers = (int)obj_from_json["count"];
+            return activeusers;
+		}
 	}
 }
