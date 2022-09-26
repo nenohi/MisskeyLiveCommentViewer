@@ -11,6 +11,13 @@ namespace MisskeyCommentViewer
 		public static WebSocket4Net.WebSocket WebSocket;
 		public event EventHandler<EventArgs> ReceiveLiveComment;
 		public string livetag = "";
+		public bool WebSocketConnectState
+		{
+			get
+			{
+				return WebSocket.State == WebSocket4Net.WebSocketState.Open||WebSocket.State == WebSocket4Net.WebSocketState.Connecting;
+			}
+		}
 		public Misskey()
 		{
 

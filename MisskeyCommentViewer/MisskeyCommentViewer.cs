@@ -21,6 +21,7 @@ namespace MisskeyCommentViewer
 		private ListViewItem listViewItemtemp = new ListViewItem();
 		private string UserID { set; get; }
 		private DispatcherTimer timer;
+		private int errorcnt=0;
 		public MisskeyCommentViewer()
 		{
 			InitializeComponent();
@@ -136,6 +137,8 @@ namespace MisskeyCommentViewer
 			UserID = id;
 			misskey.ConnectAsync();
 			ActiveUserTimer();
+			ConnectButton.Text = "Connected";
+			ConnectButton.Enabled = false;
         }
 		private async void Misskey_ReceiveLiveComment(object sender, EventArgs e)
 		{
@@ -324,6 +327,19 @@ namespace MisskeyCommentViewer
 		private void Timer_Tick(object sender, EventArgs e)
 		{
             ActiveUserCount.Text = "Active Users:" + GetActiveUser().ToString();
+			if (!ConnectButton.Enabled)
+			{
+				if (!misskey.WebSocketConnectState)
+				{
+					errorcnt++;
+				}
+				if (errorcnt > 5)
+				{
+					errorcnt = 0;
+                    ConnectButton.Enabled = true;
+                    ConnectButton.Text = "Connect";
+                }
+			}
         }
 		private int GetActiveUser()
 		{
@@ -334,6 +350,12 @@ namespace MisskeyCommentViewer
             var obj_from_json = JObject.Parse(reader.ReadToEnd());
 			activeusers = (int)obj_from_json["count"];
             return activeusers;
+		}
+
+		private void MisskeyID_TextChanged(object sender, EventArgs e)
+		{
+			ConnectButton.Enabled = true;
+			ConnectButton.Text = "Connect";
 		}
 	}
 }
