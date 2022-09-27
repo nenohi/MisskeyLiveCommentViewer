@@ -448,6 +448,9 @@ namespace MisskeyCommentViewer
 			//Console.WriteLine(label1);
 
 		}
-
+		public void ChanegAllowsTransparency(bool flag)
+		{
+			this.AllowsTransparency = flag;
+		}
 	}
 }
