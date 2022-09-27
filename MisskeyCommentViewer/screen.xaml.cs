@@ -379,7 +379,7 @@ namespace MisskeyCommentViewer
 			g.Dispose();
 			bitmap.Dispose();
 			var converter = new System.Windows.Media.BrushConverter();
-			var brush = (System.Windows.Media.Brush)converter.ConvertFromString("White");
+			var brush = TextColor;
 
 			Label label1 = new Label
 			{
