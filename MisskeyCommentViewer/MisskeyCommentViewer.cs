@@ -276,6 +276,7 @@ namespace MisskeyCommentViewer
             CommentScrean.ChanegAllowsTransparency(flag);
             CommentScrean.Visibility = System.Windows.Visibility.Visible;
 			CommentScrean.Topmost = flag;
+			CommentScrean.ShowInTaskbar = !flag;
             button1.Enabled = !flag;
             button2.Enabled = !flag;
             pictureBox1.Enabled = !flag;
