@@ -1,6 +1,6 @@
-﻿namespace MisskeyCommentViewer
+﻿namespace MisskeyLiveCommentViewer
 {
-	partial class MisskeyCommentViewer
+	partial class MisskeyLiveCommentViewer
 	{
 		/// <summary>
 		/// 必要なデザイナー変数です。

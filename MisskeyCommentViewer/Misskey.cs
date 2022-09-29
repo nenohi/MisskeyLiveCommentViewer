@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 
-namespace MisskeyCommentViewer
+namespace MisskeyLiveCommentViewer
 {
 	internal class Misskey
 	{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MisskeyCommentViewer
+namespace MisskeyLiveCommentViewer
 {
 	internal static class Program
 	{
@@ -16,7 +16,7 @@ namespace MisskeyCommentViewer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MisskeyCommentViewer());
+			Application.Run(new MisskeyLiveCommentViewer());
 		}
 	}
 }
