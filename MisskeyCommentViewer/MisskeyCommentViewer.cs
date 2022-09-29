@@ -264,8 +264,12 @@ namespace MisskeyCommentViewer
 			if (flag)
 			{
 				CommentScrean.WindowState = System.Windows.WindowState.Normal;
-				CommentScrean.WindowStyle = System.Windows.WindowStyle.None;
-			}
+				CommentScrean.WindowStyle = System.Windows.WindowStyle.None; 
+				CommentScrean.Height = screen.Bounds.Height;
+                CommentScrean.Width = screen.Bounds.Width;
+                CommentScrean.Top = screen.Bounds.Location.Y;
+                CommentScrean.Left = screen.Bounds.Location.X;
+            }
 			else
 			{
 				CommentScrean.WindowState = System.Windows.WindowState.Normal;
@@ -281,13 +285,6 @@ namespace MisskeyCommentViewer
             button2.Enabled = !flag;
             pictureBox1.Enabled = !flag;
             pictureBox2.Enabled = !flag;
-			if (flag)
-			{
-				CommentScrean.Height = screen.Bounds.Height;
-				CommentScrean.Width = screen.Bounds.Width;
-				CommentScrean.Top = screen.Bounds.Location.Y;
-				CommentScrean.Left = screen.Bounds.Location.X;
-			}
 
         }
 
