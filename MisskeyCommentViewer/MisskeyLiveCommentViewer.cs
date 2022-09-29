@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
 
-namespace MisskeyCommentViewer
+namespace MisskeyLiveCommentViewer
 {
-	public partial class MisskeyCommentViewer : Form
+	public partial class MisskeyLiveCommentViewer : Form
 	{
 		private CommentScreen CommentScrean;
 		private Misskey misskey = new Misskey();
@@ -22,7 +22,7 @@ namespace MisskeyCommentViewer
 		private string UserID { set; get; }
 		private DispatcherTimer timer;
 		private int errorcnt=0;
-		public MisskeyCommentViewer()
+		public MisskeyLiveCommentViewer()
 		{
 			InitializeComponent();
 			ScreenDisplay.DisplayMember = "DeviceName";

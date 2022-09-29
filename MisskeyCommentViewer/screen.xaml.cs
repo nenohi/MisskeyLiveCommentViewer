@@ -21,7 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace MisskeyCommentViewer
+namespace MisskeyLiveCommentViewer
 {
 	/// <summary>
 	/// screan.xaml の相互作用ロジック
