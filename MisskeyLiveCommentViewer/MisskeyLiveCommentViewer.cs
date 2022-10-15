@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace MisskeyLiveCommentViewer
 		private string UserID { set; get; }
 		private DispatcherTimer timer;
 		private int errorcnt=0;
+		private List<MisskeyComment> misskeyComments = new List<MisskeyComment>();
 		public MisskeyLiveCommentViewer()
 		{
 			InitializeComponent();
@@ -90,8 +92,9 @@ namespace MisskeyLiveCommentViewer
                         CommentScrean.Width = ((Screen)ScreenDisplay.SelectedItem).Bounds.Width;
                         CommentScrean.Top = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.Y;
                         CommentScrean.Left = ((Screen)ScreenDisplay.SelectedItem).Bounds.Location.X;
-					}
-					else
+						WindowReOpen((Screen)ScreenDisplay.SelectedItem, true);
+                    }
+                    else
 					{
 						WindowReOpen((Screen)ScreenDisplay.SelectedItem, true);
 					}
@@ -142,6 +145,19 @@ namespace MisskeyLiveCommentViewer
         }
 		private async void Misskey_ReceiveLiveComment(object sender, EventArgs e)
 		{
+			var json = JsonConvert.DeserializeObject<MisskeyReceiveObj>(sender.ToString());
+			string Text = json.body.body.text;
+			string regex = @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)";
+			Text = Regex.Replace(Text, regex, "");
+			Text = Text.Trim();
+			if (misskeyComments.Find(u => u.NoteId == json.body.body.id) != null) return;
+			misskeyComments.Add(new MisskeyComment() { 
+				NoteId = json.body.body.id,
+				UserIcon = json.body.body.user.avatarUrl,
+				NoteText = Text,
+				UserID = json.body.body.userId,
+				UserName = json.body.body.user.username,
+			});
 			if (ShowCommentWindow.Checked)
 			{
 				CommentScrean.Dispatcher.Invoke(() =>
@@ -149,15 +165,10 @@ namespace MisskeyLiveCommentViewer
 					CommentScrean.Addtext(sender);
 				});
 			}
-			var json = JsonConvert.DeserializeObject<MisskeyReceiveObj>(sender.ToString());
 			if (!ImageList.Images.Keys.Contains(json.body.body.user.username))
 			{
 				await ViewImageURL(json.body.body.user.avatarUrl, json.body.body.user.username);
 			}
-			string Text = json.body.body.text;
-			string regex = @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)";
-			Text = Regex.Replace(Text, regex, "");
-			Text = Text.Trim();
 			string[] item = { json.body.body.user.username, json.body.body.user.name, json.body.body.user.username, Text };
 			listViewItemtemp = new ListViewItem();
 			listViewItemtemp.Text = "";
@@ -355,5 +366,58 @@ namespace MisskeyLiveCommentViewer
 			ConnectButton.Enabled = true;
 			ConnectButton.Text = "Connect";
 		}
+
+		private async void LoginButton_Click(object sender, EventArgs e)
+		{
+			bool login = await misskey.GetToken("misskey.io");
+			if (misskey.GetI()==string.Empty)
+			{
+				LoginButton.Enabled = true;
+			}
+			else if (login)
+			{
+				LoginButton.Enabled = false;
+				SendTextBox.Enabled = true;
+				SendButton.Enabled = true;
+			}
+			else
+			{
+                LoginButton.Enabled = true;
+            }
+        }
+
+		private async void SendButton_Click(object sender, EventArgs e)
+		{
+			if (!LoginButton.Enabled)
+			{
+				SendTextBox.Enabled = false;
+				SendButton.Enabled = false;
+				await misskey.PostNote(SendTextBox.Text);
+				SendTextBox.Text = "";
+				SendTextBox.Enabled = true;
+				SendButton.Enabled = true;
+			}
+		}
+
+		private async void SendTextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Enter&&!LoginButton.Enabled)
+			{
+                SendTextBox.Enabled = false;
+                SendButton.Enabled = false;
+                await misskey.PostNote(SendTextBox.Text);
+                SendTextBox.Text = "";
+                SendTextBox.Enabled = true;
+                SendButton.Enabled = true;
+            }
+		}
+	}
+	public class MisskeyComment
+	{
+		public string UserName { get; set; }
+		public string UserID { get; set; }
+		public string UserIcon { get; set; }
+		public string NoteId { get; set; }
+		public string NoteText { get; set; }
 	}
 }
