@@ -43,6 +43,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.ActiveUserCount = new System.Windows.Forms.Label();
+            this.LoginButton = new System.Windows.Forms.Button();
+            this.SendButton = new System.Windows.Forms.Button();
+            this.SendTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -56,7 +59,7 @@
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(620, 426);
+            this.listView1.Size = new System.Drawing.Size(620, 400);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -64,7 +67,7 @@
             // ConnectButton
             // 
             this.ConnectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConnectButton.Location = new System.Drawing.Point(713, 382);
+            this.ConnectButton.Location = new System.Drawing.Point(713, 361);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(75, 23);
             this.ConnectButton.TabIndex = 1;
@@ -101,7 +104,7 @@
             // MisskeyID
             // 
             this.MisskeyID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.MisskeyID.Location = new System.Drawing.Point(648, 357);
+            this.MisskeyID.Location = new System.Drawing.Point(648, 336);
             this.MisskeyID.Name = "MisskeyID";
             this.MisskeyID.Size = new System.Drawing.Size(140, 19);
             this.MisskeyID.TabIndex = 4;
@@ -144,7 +147,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(646, 342);
+            this.label1.Location = new System.Drawing.Point(646, 321);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 12);
             this.label1.TabIndex = 8;
@@ -195,17 +198,54 @@
             // 
             this.ActiveUserCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ActiveUserCount.AutoSize = true;
-            this.ActiveUserCount.Location = new System.Drawing.Point(646, 426);
+            this.ActiveUserCount.Location = new System.Drawing.Point(646, 400);
             this.ActiveUserCount.Name = "ActiveUserCount";
             this.ActiveUserCount.Size = new System.Drawing.Size(74, 12);
             this.ActiveUserCount.TabIndex = 8;
             this.ActiveUserCount.Text = "Active Users:";
             // 
-            // MisskeyCommentViewer
+            // LoginButton
+            // 
+            this.LoginButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.LoginButton.Location = new System.Drawing.Point(718, 418);
+            this.LoginButton.Name = "LoginButton";
+            this.LoginButton.Size = new System.Drawing.Size(75, 23);
+            this.LoginButton.TabIndex = 11;
+            this.LoginButton.Text = "Login";
+            this.LoginButton.UseVisualStyleBackColor = true;
+            this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
+            // 
+            // SendButton
+            // 
+            this.SendButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.SendButton.Enabled = false;
+            this.SendButton.Location = new System.Drawing.Point(637, 418);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(75, 23);
+            this.SendButton.TabIndex = 12;
+            this.SendButton.Text = "投稿";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
+            // 
+            // SendTextBox
+            // 
+            this.SendTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SendTextBox.Enabled = false;
+            this.SendTextBox.Location = new System.Drawing.Point(12, 420);
+            this.SendTextBox.Name = "SendTextBox";
+            this.SendTextBox.Size = new System.Drawing.Size(620, 19);
+            this.SendTextBox.TabIndex = 13;
+            this.SendTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SendTextBox_KeyUp);
+            // 
+            // MisskeyLiveCommentViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.SendTextBox);
+            this.Controls.Add(this.SendButton);
+            this.Controls.Add(this.LoginButton);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.ActiveUserCount);
@@ -220,7 +260,7 @@
             this.Controls.Add(this.ShowCommentWindow);
             this.Controls.Add(this.ConnectButton);
             this.Controls.Add(this.listView1);
-            this.Name = "MisskeyCommentViewer";
+            this.Name = "MisskeyLiveCommentViewer";
             this.Text = "MisskeyCommentViewer";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -246,6 +286,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label ActiveUserCount;
+        private System.Windows.Forms.Button LoginButton;
+        private System.Windows.Forms.Button SendButton;
+        private System.Windows.Forms.TextBox SendTextBox;
     }
 }
 
