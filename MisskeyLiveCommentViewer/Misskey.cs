@@ -34,6 +34,15 @@ namespace MisskeyLiveCommentViewer
         public void ConnectAsync()
         {
             WebSocket?.Close();
+            if (WebSocket != null)
+            {
+                WebSocket.MessageReceived -= WebSocket_MessageReceived;
+                WebSocket.Error -= WebSocket_Error;
+                WebSocket.Opened -= WebSocket_Opened;
+                WebSocket1.MessageReceived -= WebSocket_MessageReceived;
+                WebSocket1.Error -= WebSocket_Error;
+                WebSocket1.Opened -= WebSocket_Opened;
+            }
             WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
             WebSocket.MessageReceived += WebSocket_MessageReceived;
             WebSocket.Error += WebSocket_Error;
