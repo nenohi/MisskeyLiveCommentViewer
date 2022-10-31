@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.WebSockets;
 using System.Text;
@@ -33,26 +34,51 @@ namespace MisskeyLiveCommentViewer
         }
         public void ConnectAsync()
         {
-            WebSocket?.Close();
             if (WebSocket != null)
             {
-                WebSocket.MessageReceived -= WebSocket_MessageReceived;
-                WebSocket.Error -= WebSocket_Error;
-                WebSocket.Opened -= WebSocket_Opened;
-                WebSocket1.MessageReceived -= WebSocket_MessageReceived;
-                WebSocket1.Error -= WebSocket_Error;
-                WebSocket1.Opened -= WebSocket_Opened;
+                try
+                {
+
+                    WebSocket.MessageReceived -= WebSocket_MessageReceived;
+                    WebSocket.Error -= WebSocket_Error;
+                    WebSocket.Opened -= WebSocket_Opened;
+                    WebSocket.Close();
+                }
+                finally
+                {
+                    WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                    WebSocket.MessageReceived += WebSocket_MessageReceived;
+                    WebSocket.Error += WebSocket_Error;
+                    WebSocket.Opened += WebSocket_Opened;
+
+                }
+                try
+                {
+                    WebSocket1.MessageReceived -= WebSocket_MessageReceived;
+                    WebSocket1.Error -= WebSocket_Error;
+                    WebSocket1.Opened -= WebSocket_Opened;
+                    WebSocket1.Close();
+                }
+                finally
+                {
+                    WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                    WebSocket1.MessageReceived += WebSocket_MessageReceived;
+                    WebSocket1.Error += WebSocket_Error;
+                    WebSocket1.Opened += WebSocket_Opened;
+                }
             }
-            WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
-            WebSocket.MessageReceived += WebSocket_MessageReceived;
-            WebSocket.Error += WebSocket_Error;
-            WebSocket.Opened += WebSocket_Opened;
+            else
+            {
+                WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                WebSocket.MessageReceived += WebSocket_MessageReceived;
+                WebSocket.Error += WebSocket_Error;
+                WebSocket.Opened += WebSocket_Opened;
+                WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                WebSocket1.MessageReceived += WebSocket_MessageReceived;
+                WebSocket1.Error += WebSocket_Error;
+                WebSocket1.Opened += WebSocket_Opened;
+            }
             WebSocket.Open();
-            WebSocket1?.Close();
-            WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
-            WebSocket1.MessageReceived += WebSocket_MessageReceived;
-            WebSocket1.Error += WebSocket_Error;
-            WebSocket1.Opened += WebSocket_Opened;
             WebSocket1.Open();
         }
 
