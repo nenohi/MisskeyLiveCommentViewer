@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -259,7 +259,7 @@ namespace MisskeyLiveCommentViewer
             }
             else
             {
-                txt = $"{Text}\r\n#MisskeyLive #{livetag}";
+                txt = $"{Text}\r\n#MisskeyLive #{livetag.Replace("ml", "ML")}\r\nhttps://live.misskey.io/{livetag.Replace("ml", "@")}";
             }
             Dictionary<string, string> postdata = new Dictionary<string, string>();
             postdata.Add("text", txt);
