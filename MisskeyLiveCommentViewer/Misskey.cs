@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -90,20 +90,20 @@ namespace MisskeyLiveCommentViewer
             string senddata_json = JsonConvert.SerializeObject(senddata);
 
             WebSocket.Send(senddata_json);
-            Console.WriteLine(sender.ToString());
+            Debug.WriteLine(sender.ToString());
         }
 
         private void WebSocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
             ConnectAsync();
-            Console.WriteLine(e.Exception.Message);
+            Debug.WriteLine(e.Exception.Message);
         }
 
         private void WebSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
         {
             EventHandler<EventArgs> eventHandler = ReceiveLiveComment;
             string txt = e.Message.ToString();
-            Console.WriteLine(txt);
+            Debug.WriteLine(txt);
             MisskeyReceiveObj misskeyReceiveObj = JsonConvert.DeserializeObject<MisskeyReceiveObj>(txt);
             bool tagflag = false;
             if (misskeyReceiveObj == null) return;
@@ -209,7 +209,7 @@ namespace MisskeyLiveCommentViewer
         }
         public string GetI()
         {
-            return i == null ? String.Empty : i;
+            return i ?? String.Empty;
         }
         public async Task<string> CreateApp(string url)
         {
