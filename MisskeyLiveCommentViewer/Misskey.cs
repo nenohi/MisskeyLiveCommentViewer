@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.WebSockets;
 using System.Text;
@@ -33,17 +34,51 @@ namespace MisskeyLiveCommentViewer
         }
         public void ConnectAsync()
         {
-            WebSocket?.Close();
-            WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
-            WebSocket.MessageReceived += WebSocket_MessageReceived;
-            WebSocket.Error += WebSocket_Error;
-            WebSocket.Opened += WebSocket_Opened;
+            if (WebSocket != null)
+            {
+                try
+                {
+
+                    WebSocket.MessageReceived -= WebSocket_MessageReceived;
+                    WebSocket.Error -= WebSocket_Error;
+                    WebSocket.Opened -= WebSocket_Opened;
+                    WebSocket.Close();
+                }
+                finally
+                {
+                    WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                    WebSocket.MessageReceived += WebSocket_MessageReceived;
+                    WebSocket.Error += WebSocket_Error;
+                    WebSocket.Opened += WebSocket_Opened;
+
+                }
+                try
+                {
+                    WebSocket1.MessageReceived -= WebSocket_MessageReceived;
+                    WebSocket1.Error -= WebSocket_Error;
+                    WebSocket1.Opened -= WebSocket_Opened;
+                    WebSocket1.Close();
+                }
+                finally
+                {
+                    WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                    WebSocket1.MessageReceived += WebSocket_MessageReceived;
+                    WebSocket1.Error += WebSocket_Error;
+                    WebSocket1.Opened += WebSocket_Opened;
+                }
+            }
+            else
+            {
+                WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                WebSocket.MessageReceived += WebSocket_MessageReceived;
+                WebSocket.Error += WebSocket_Error;
+                WebSocket.Opened += WebSocket_Opened;
+                WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                WebSocket1.MessageReceived += WebSocket_MessageReceived;
+                WebSocket1.Error += WebSocket_Error;
+                WebSocket1.Opened += WebSocket_Opened;
+            }
             WebSocket.Open();
-            WebSocket1?.Close();
-            WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
-            WebSocket1.MessageReceived += WebSocket_MessageReceived;
-            WebSocket1.Error += WebSocket_Error;
-            WebSocket1.Opened += WebSocket_Opened;
             WebSocket1.Open();
         }
 
@@ -55,20 +90,20 @@ namespace MisskeyLiveCommentViewer
             string senddata_json = JsonConvert.SerializeObject(senddata);
 
             WebSocket.Send(senddata_json);
-            Console.WriteLine(sender.ToString());
+            Debug.WriteLine(sender.ToString());
         }
 
         private void WebSocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
             ConnectAsync();
-            Console.WriteLine(e.Exception.Message);
+            Debug.WriteLine(e.Exception.Message);
         }
 
         private void WebSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
         {
             EventHandler<EventArgs> eventHandler = ReceiveLiveComment;
             string txt = e.Message.ToString();
-            Console.WriteLine(txt);
+            Debug.WriteLine(txt);
             MisskeyReceiveObj misskeyReceiveObj = JsonConvert.DeserializeObject<MisskeyReceiveObj>(txt);
             bool tagflag = false;
             if (misskeyReceiveObj == null) return;
@@ -174,7 +209,7 @@ namespace MisskeyLiveCommentViewer
         }
         public string GetI()
         {
-            return i == null ? String.Empty : i;
+            return i ?? String.Empty;
         }
         public async Task<string> CreateApp(string url)
         {
@@ -250,7 +285,7 @@ namespace MisskeyLiveCommentViewer
             }
             else
             {
-                txt = $"{Text}\r\n#MisskeyLive #{livetag}";
+                txt = $"{Text}\r\n#MisskeyLive #{livetag.Replace("ml", "ML")}\r\nhttps://live.misskey.io/{livetag.Replace("ml", "@")}";
             }
             Dictionary<string, string> postdata = new Dictionary<string, string>();
             postdata.Add("text", txt);
