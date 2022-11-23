@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -399,10 +399,41 @@ namespace MisskeyLiveCommentViewer
 			}
 		}
 
-		private async void SendTextBox_KeyUp(object sender, KeyEventArgs e)
+		private async void MisskeyLiveCommentViewer_Load(object sender, EventArgs e)
 		{
-			if(e.KeyCode == Keys.Enter&&!LoginButton.Enabled)
+			misskey.Setting(Properties.Settings.Default.appSecret,
+							Properties.Settings.Default.i, 
+							Properties.Settings.Default.token, 
+							Properties.Settings.Default.instanceurl, 
+							Properties.Settings.Default.livetag);
+			MisskeyID.Text = Properties.Settings.Default.livetag;
+			if (misskey.I == String.Empty) return;
+			if (await misskey.CheckToken(misskey.I))
 			{
+                LoginButton.Enabled = false;
+                SendTextBox.Enabled = true;
+                SendButton.Enabled = true;
+				ConnectButton_Click(sender, e);
+            }
+		}
+
+		private void MisskeyLiveCommentViewer_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			Properties.Settings.Default.i = misskey.I;
+            Properties.Settings.Default.appSecret = misskey.AppSecret;
+			Properties.Settings.Default.token = misskey.Token;
+            Properties.Settings.Default.instanceurl = misskey.Instanceurl;
+			Properties.Settings.Default.livetag = misskey.Livetag;
+			Properties.Settings.Default.Save();
+        }
+
+		private async void SendTextBox_KeyDown(object sender, KeyEventArgs e)
+		{
+            TextBox textBox = sender as TextBox;
+            System.Diagnostics.Debug.WriteLine(textBox.ImeMode);
+			if(textBox.Text == String.Empty) return;
+            if (e.KeyCode == Keys.Enter && !LoginButton.Enabled)
+            {
                 SendTextBox.Enabled = false;
                 SendButton.Enabled = false;
                 await misskey.PostNote(SendTextBox.Text);
@@ -410,7 +441,7 @@ namespace MisskeyLiveCommentViewer
                 SendTextBox.Enabled = true;
                 SendButton.Enabled = true;
             }
-		}
+        }
 	}
 	public class MisskeyComment
 	{
