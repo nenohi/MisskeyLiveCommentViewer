@@ -236,7 +236,7 @@
             this.SendTextBox.Name = "SendTextBox";
             this.SendTextBox.Size = new System.Drawing.Size(620, 19);
             this.SendTextBox.TabIndex = 13;
-            this.SendTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SendTextBox_KeyUp);
+            this.SendTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SendTextBox_KeyDown);
             // 
             // MisskeyLiveCommentViewer
             // 
@@ -262,6 +262,8 @@
             this.Controls.Add(this.listView1);
             this.Name = "MisskeyLiveCommentViewer";
             this.Text = "MisskeyCommentViewer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MisskeyLiveCommentViewer_FormClosing);
+            this.Load += new System.EventHandler(this.MisskeyLiveCommentViewer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

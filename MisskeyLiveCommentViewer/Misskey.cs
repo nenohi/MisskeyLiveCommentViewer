@@ -298,6 +298,19 @@ namespace MisskeyLiveCommentViewer
                 var response = await client.PostAsync(instanceurl + "/api/notes/create", content);
             }
         }
+        public void Setting(string AppSecret,string i,string token,string instanceurl,string livetag)
+        {
+            this.appSecret = AppSecret;
+            this.i = i;
+            this.token = token;
+            this.instanceurl = instanceurl;
+            this.livetag = livetag;
+        }
+        public string AppSecret { get => appSecret; }
+        public string I { get => i; }
+        public string Token { get => token; }
+        public string Instanceurl { get => instanceurl; }
+        public string Livetag { get => livetag; }
     }
     public class MisskeyConnectObj
     {
