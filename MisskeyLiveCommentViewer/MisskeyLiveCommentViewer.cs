@@ -189,7 +189,7 @@ namespace MisskeyLiveCommentViewer
             {
                 Moetts moetts = new Moetts();
                 moetts.MoettsWSUrl = "wss://skytnt-moe-tts.hf.space/queue/join";
-                moetts.Start(Text, selectvoicename, 1, GetLanguageIdentification(selectvoicelan));
+                moetts.Start(Text, selectvoicename, selectvoiceindex, GetLanguageIdentification(selectvoicelan));
             }
             if (InvokeRequired)
             {
@@ -438,7 +438,7 @@ namespace MisskeyLiveCommentViewer
                 {
                     foreach (var voice in item.Value.Voice)
                     {
-                        comboBox1.Items.Add(voice);
+                        comboBox1.Items.Add(new ComboboxItem() { Name=voice,num=item.Value.fn_index});
                         maxSize = Math.Max(maxSize, TextRenderer.MeasureText(voice, comboBox1.Font).Width);
                     }
                 }
@@ -478,6 +478,7 @@ namespace MisskeyLiveCommentViewer
             }
         }
         private string selectvoicename="";
+        private int selectvoiceindex = 1;
         private string selectvoicelan="";
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -485,13 +486,15 @@ namespace MisskeyLiveCommentViewer
             var selectint = comboBox1.SelectedIndex;
             if (voname == null) return;
             if (selectint == -1) return;
+            ComboboxItem item1 = (ComboboxItem)comboBox1.SelectedItem;
             selectvoicename = comboBox1.SelectedItem.ToString();
+            selectvoiceindex = item1.num;
             uint vocnt = 0;
             foreach (var item in VoiceClass)
             {
                 vocnt += (uint)item.Value.Voice.Count;
                 if (vocnt < selectint) { continue; }
-                if (item.Value.Voice.Contains(voname))
+                if (item.Value.Voice.Contains(item1.Name) && item.Value.fn_index == item1.num)
                 {
                     comboBox2.Items.Clear();
                     foreach (var lan in item.Value.Language)
@@ -521,5 +524,14 @@ namespace MisskeyLiveCommentViewer
         public string UserIcon { get; set; }
         public string NoteId { get; set; }
         public string NoteText { get; set; }
+    }
+    public class ComboboxItem
+    {
+        public string Name="";
+        public int num=0;
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
