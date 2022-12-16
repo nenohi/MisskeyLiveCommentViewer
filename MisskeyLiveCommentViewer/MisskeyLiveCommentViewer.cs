@@ -179,17 +179,16 @@ namespace MisskeyLiveCommentViewer
             listViewItemtemp.ImageKey = json.body.body.user.username;
             listViewItemtemp.SubItems.Add(json.body.body.user.name);
             listViewItemtemp.SubItems.Add(Text);
+            string notagtext = Regex.Replace(Text, @"(#[a-z|A-Z]*)", "");
 
             if (Bouyomichan.Checked)
             {
-                string bouyomi = Regex.Replace(Text, @"(#[a-z|A-Z]*)", "");
-                bouyomichan.Speak(bouyomi);
+                bouyomichan.Speak(notagtext);
             }
             if (VoiceClass.Count > 0)
             {
-                Moetts moetts = new Moetts();
                 moetts.MoettsWSUrl = "wss://skytnt-moe-tts.hf.space/queue/join";
-                moetts.Start(Text, selectvoicename, selectvoiceindex, GetLanguageIdentification(selectvoicelan));
+                moetts.Start(notagtext, selectvoicename, selectvoiceindex, GetLanguageIdentification(selectvoicelan));
             }
             if (InvokeRequired)
             {
@@ -200,6 +199,7 @@ namespace MisskeyLiveCommentViewer
                 ListAdd();
             }
         }
+        private Moetts moetts = new Moetts();
         private string GetLanguageIdentification(string lang)
         {
             var identification = Regex.Match(lang, "(\\[[A-Z]*\\])");
@@ -422,13 +422,15 @@ namespace MisskeyLiveCommentViewer
                             Properties.Settings.Default.instanceurl,
                             Properties.Settings.Default.livetag);
             MisskeyID.Text = Properties.Settings.Default.livetag;
-            if (misskey.I == String.Empty) return;
-            if (await misskey.CheckToken(misskey.I))
+            if (misskey.I != String.Empty)
             {
-                LoginButton.Enabled = false;
-                SendTextBox.Enabled = true;
-                SendButton.Enabled = true;
-                ConnectButton_Click(sender, e);
+                if (await misskey.CheckToken(misskey.I))
+                {
+                    LoginButton.Enabled = false;
+                    SendTextBox.Enabled = true;
+                    SendButton.Enabled = true;
+                    ConnectButton_Click(sender, e);
+                }
             }
             if (File.Exists("./voice.json"))
             {
@@ -438,7 +440,7 @@ namespace MisskeyLiveCommentViewer
                 {
                     foreach (var voice in item.Value.Voice)
                     {
-                        comboBox1.Items.Add(new ComboboxItem() { Name=voice,num=item.Value.fn_index});
+                        comboBox1.Items.Add(new ComboboxItem() { Name = voice, num = item.Value.fn_index });
                         maxSize = Math.Max(maxSize, TextRenderer.MeasureText(voice, comboBox1.Font).Width);
                     }
                 }
@@ -446,7 +448,7 @@ namespace MisskeyLiveCommentViewer
                 comboBox1.DropDownWidth = maxSize;
                 if (comboBox1.Items.Count > 0)
                 {
-                    comboBox1.SelectedIndex= 0;
+                    comboBox1.SelectedIndex = 0;
                 }
             }
         }
@@ -477,9 +479,9 @@ namespace MisskeyLiveCommentViewer
                 SendButton.Enabled = true;
             }
         }
-        private string selectvoicename="";
+        private string selectvoicename = "";
         private int selectvoiceindex = 1;
-        private string selectvoicelan="";
+        private string selectvoicelan = "";
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var voname = comboBox1.SelectedItem;
@@ -527,8 +529,8 @@ namespace MisskeyLiveCommentViewer
     }
     public class ComboboxItem
     {
-        public string Name="";
-        public int num=0;
+        public string Name = "";
+        public int num = 0;
         public override string ToString()
         {
             return Name;

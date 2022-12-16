@@ -19,7 +19,6 @@ namespace MisskeyLiveCommentViewer
         public string MoettsWSUrl;
         public SessionStartClass SessionStartClass = new SessionStartClass();
         private SendDataMessage SendDataMessage = new SendDataMessage();
-        public Queue<VoiceData> strings = new Queue<VoiceData>();
         private ReceiveDataMessage ReceiveDataMessage = new ReceiveDataMessage();
         public void Open()
         {
@@ -29,10 +28,12 @@ namespace MisskeyLiveCommentViewer
             WebSocket.Closed += WebSocket_Closed;
             WebSocket.Open();
         }
-        public void Start(string Text,string Name,int fnindex,string LanguageText)
+        public void Start(string Text, string Name, int fnindex, string LanguageText)
         {
+            SessionStartClass = new SessionStartClass();
             SessionStartClass.fn_index = fnindex;
             SessionStartClass.session_hash = sessionhashcreate();
+            SendDataMessage = new SendDataMessage();
             SendDataMessage.fn_index = fnindex;
             if (!string.IsNullOrEmpty(LanguageText)) Text = $"{LanguageText}{Text}{LanguageText}";
             SendDataMessage.data.Add(Text);
@@ -57,6 +58,7 @@ namespace MisskeyLiveCommentViewer
         {
             string txt = e.Message.ToString();
             var jsondata = JsonConvert.DeserializeObject<NormalMessage>(txt);
+            Console.WriteLine(txt);
             switch (jsondata.msg)
             {
                 case "send_hash":
@@ -66,7 +68,6 @@ namespace MisskeyLiveCommentViewer
                     return;
                 case "send_data":
                     WebSocket.Send(JsonClassToObject(SendDataMessage));
-                    //WebSocket.Send();
                     break;
                 case "process_starts":
                     break;
@@ -98,16 +99,35 @@ namespace MisskeyLiveCommentViewer
         {
             return JsonConvert.SerializeObject(obj);
         }
+        System.Media.SoundPlayer soundPlayer = new System.Media.SoundPlayer();
         private void SoundPlay(string Data)
         {
-            System.Media.SoundPlayer soundPlayer = new System.Media.SoundPlayer();
-            string sounddatabase64 = System.Text.RegularExpressions.Regex.Match(Data,"[^data:audio\\/wav;base64,](.*)").Value;
-            Encoding enc;
+            if (isplaying)
+            {
+                soundPlayQueue.Enqueue(Data);
+                return;
+            }
+            string sounddatabase64 = System.Text.RegularExpressions.Regex.Match(Data, "[^data:audio\\/wav;base64,](.*)").Value;
             var sounddata = Convert.FromBase64String(sounddatabase64);
             soundPlayer.Stream = new MemoryStream(sounddata); ;
             soundPlayer.Load();
-            soundPlayer.Play();
+            try
+            {
+
+                isplaying = true;
+                soundPlayer.PlaySync();
+            }
+            finally
+            {
+                isplaying = false;
+            }
+            if(soundPlayQueue.Count > 0)
+            {
+                SoundPlay(soundPlayQueue.Dequeue());
+            }
         }
+        bool isplaying = false;
+        Queue<string> soundPlayQueue = new Queue<string>();
         public static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();
