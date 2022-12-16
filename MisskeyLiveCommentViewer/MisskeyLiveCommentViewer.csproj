@@ -188,6 +188,7 @@
     <Compile Include="screen.xaml.cs">
       <DependentUpon>screen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VoiceClass.cs" />
     <EmbeddedResource Include="MisskeyLiveCommentViewer.resx">
       <DependentUpon>MisskeyLiveCommentViewer.cs</DependentUpon>
     </EmbeddedResource>
