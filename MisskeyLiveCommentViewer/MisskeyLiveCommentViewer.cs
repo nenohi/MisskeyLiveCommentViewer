@@ -185,7 +185,7 @@ namespace MisskeyLiveCommentViewer
             {
                 bouyomichan.Speak(notagtext);
             }
-            if (VoiceClass.Count > 0)
+            if (VoiceClass.Count > 0 && playmoetts.Checked)
             {
                 moetts.MoettsWSUrl = "wss://skytnt-moe-tts.hf.space/queue/join";
                 moetts.Start(notagtext, selectvoicename, selectvoiceindex, GetLanguageIdentification(selectvoicelan));

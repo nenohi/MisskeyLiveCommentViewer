@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 
@@ -26,8 +27,16 @@ namespace MisskeyLiveCommentViewer
             WebSocket.MessageReceived += WebSocket_MessageReceived;
             WebSocket.Opened += WebSocket_Opened;
             WebSocket.Closed += WebSocket_Closed;
+            WebSocket.Error += WebSocket_Error;
             WebSocket.Open();
         }
+
+        private void WebSocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        {
+            Console.WriteLine(sender);
+            Console.WriteLine(e);
+        }
+
         public void Start(string Text, string Name, int fnindex, string LanguageText)
         {
             SessionStartClass = new SessionStartClass();
@@ -46,12 +55,14 @@ namespace MisskeyLiveCommentViewer
 
         private void WebSocket_Closed(object sender, EventArgs e)
         {
-
+            Console.WriteLine(sender);
+            Console.WriteLine(e);
         }
 
         private void WebSocket_Opened(object sender, EventArgs e)
         {
-
+            Console.WriteLine(sender);
+            Console.WriteLine(e);
         }
 
         private void WebSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
@@ -73,7 +84,7 @@ namespace MisskeyLiveCommentViewer
                     break;
                 case "process_completed":
                     ReceiveDataMessage = JsonConvert.DeserializeObject<ReceiveDataMessage>(txt);
-                    if (ReceiveDataMessage.success)
+                    if (Regex.IsMatch(ReceiveDataMessage.output.data[0],"Success"))
                     {
                         SoundPlay(ReceiveDataMessage.output.data[1]);
                     }

@@ -48,6 +48,7 @@
             this.SendTextBox = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.playmoetts = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -246,7 +247,7 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.comboBox1.Location = new System.Drawing.Point(648, 183);
+            this.comboBox1.Location = new System.Drawing.Point(648, 186);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(140, 20);
             this.comboBox1.TabIndex = 14;
@@ -258,17 +259,29 @@
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.comboBox2.Location = new System.Drawing.Point(648, 209);
+            this.comboBox2.Location = new System.Drawing.Point(648, 212);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(140, 20);
             this.comboBox2.TabIndex = 15;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // playmoetts
+            // 
+            this.playmoetts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.playmoetts.AutoSize = true;
+            this.playmoetts.Location = new System.Drawing.Point(647, 164);
+            this.playmoetts.Name = "playmoetts";
+            this.playmoetts.Size = new System.Drawing.Size(65, 16);
+            this.playmoetts.TabIndex = 16;
+            this.playmoetts.Text = "Moe-tts";
+            this.playmoetts.UseVisualStyleBackColor = true;
             // 
             // MisskeyLiveCommentViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.playmoetts);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.SendTextBox);
@@ -321,6 +334,7 @@
         private System.Windows.Forms.TextBox SendTextBox;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.CheckBox playmoetts;
     }
 }
 
