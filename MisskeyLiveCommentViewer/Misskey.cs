@@ -11,7 +11,6 @@ namespace MisskeyLiveCommentViewer
 {
     internal class Misskey
     {
-        public static ClientWebSocket ws = new ClientWebSocket();
         public static WebSocket4Net.WebSocket WebSocket;
         public static WebSocket4Net.WebSocket WebSocket1;
         public event EventHandler<EventArgs> ReceiveLiveComment;
@@ -95,8 +94,8 @@ namespace MisskeyLiveCommentViewer
 
         private void WebSocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
-            ConnectAsync();
             Debug.WriteLine(e.Exception.Message);
+            ConnectAsync();
         }
 
         private void WebSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
