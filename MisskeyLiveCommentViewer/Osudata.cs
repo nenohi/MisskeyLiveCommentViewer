@@ -85,15 +85,19 @@ namespace MisskeyLiveCommentViewer
         public string ModString()
         {
             int num = GetMods();
-            string modstr = string.Empty;
+            List<string> mots = new List<string>();
             for(int n=0;n < AllMods.Length; n++) 
             { 
                 if (IsBitSet((byte)num,n))
                 {
-                    modstr+= AllMods[n].ToString();
+                    mots.Add(AllMods[n].ToString());
                 }
             }
-            return modstr;
+            if(mots.Count > 0)
+            {
+                return String.Join(",",mots.ToArray());
+            }
+            return "none";
         }
         private bool IsBitSet(byte b, int pos)
         {

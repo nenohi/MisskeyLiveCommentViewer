@@ -187,7 +187,7 @@ namespace MisskeyLiveCommentViewer
                 {
                     if (Osudata.IsRunning())
                     {
-                        string text = $"{(Osudata.IsPlaying()?"Playing:":"Listening:")}[{Osudata.GetOsuSongString()}]({Osudata.GetMapSetURL()})";
+                        string text = $"{(Osudata.IsPlaying()?"Playing:":"Listening:")}{Osudata.GetOsuSongString()}\r\n{Osudata.GetMapSetURL()}\r\nAR:{Osudata.GetAR()}\r\nHP:{Osudata.GetHP()}\r\nCS:{Osudata.GetOD()}\r\nOD:{Osudata.GetOD()}\r\nMods:{Osudata.ModString()}";
                         misskey.PostNote(text, json.body.body.id);
                     }
                 }
