@@ -105,7 +105,7 @@ namespace MisskeyLiveCommentViewer
             var tourneyLeftStars = OsuMemoryReader.ReadTourneyLeftStars();
             var tourneyRightStars = OsuMemoryReader.ReadTourneyRightStars();
             
-            return $"{(float.Parse(tourneyLeftStars.ToString()).ToString())}";
+            return $"{(float.Parse(tourneyLeftStars.ToString()) + float.Parse(tourneyRightStars.ToString()))}";
 
         }
         private bool IsBitSet(byte b, int pos)
