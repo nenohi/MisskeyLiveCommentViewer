@@ -188,7 +188,7 @@ namespace MisskeyLiveCommentViewer
                     if (Osudata.IsRunning())
                     {
                         string text = $"{(Osudata.IsPlaying()?"Playing:":"Listening:")}{Osudata.GetOsuSongString()}\r\n{Osudata.GetMapSetURL()}\r\n" +
-                            $"Stars:{Osudata.GetStars()}" +
+                            $"Stars:{Osudata.GetStars()}\r\n" +
                             $"AR:{Osudata.GetAR()}\r\nHP:{Osudata.GetHP()}\r\n" +
                             $"CS:{Osudata.GetOD()}\r\nOD:{Osudata.GetOD()}\r\n" +
                             $"Mods:{Osudata.ModString()}";
