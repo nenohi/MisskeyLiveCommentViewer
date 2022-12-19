@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Buffers.Text;
 using System.Collections;
@@ -39,11 +39,15 @@ namespace MisskeyLiveCommentViewer
 
         public void Start(string Text, string Name, int fnindex, string LanguageText)
         {
-            SessionStartClass = new SessionStartClass();
-            SessionStartClass.fn_index = fnindex;
-            SessionStartClass.session_hash = sessionhashcreate();
-            SendDataMessage = new SendDataMessage();
-            SendDataMessage.fn_index = fnindex;
+            SessionStartClass = new SessionStartClass
+            {
+                fn_index = fnindex,
+                session_hash = Sessionhashcreate()
+            };
+            SendDataMessage = new SendDataMessage
+            {
+                fn_index = fnindex
+            };
             if (!string.IsNullOrEmpty(LanguageText)) Text = $"{LanguageText}{Text}{LanguageText}";
             SendDataMessage.data.Add(Text);
             SendDataMessage.data.Add(Name);
@@ -94,7 +98,7 @@ namespace MisskeyLiveCommentViewer
                     break;
             }
         }
-        private string sessionhashcreate()
+        private string Sessionhashcreate()
         {
             var txt = "abcdefghijklmnopqrstuvwxyz0123456789";
             var n = 10;
