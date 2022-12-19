@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -87,18 +87,25 @@ namespace MisskeyLiveCommentViewer
         {
             int num = GetMods();
             List<string> mots = new List<string>();
-            for(int n=0;n < AllMods.Length; n++) 
-            { 
-                if (IsBitSet((byte)num,n))
+            for (int n = 0; n < AllMods.Length; n++)
+            {
+                if (IsBitSet((byte)num, n))
                 {
                     mots.Add(AllMods[n].ToString());
                 }
             }
-            if(mots.Count > 0)
+            if (mots.Count > 0)
             {
-                return String.Join(",",mots.ToArray());
+                return String.Join(",", mots.ToArray());
             }
             return "none";
+        }
+        public string GetStars()
+        {
+            var tourneyLeftStars = OsuMemoryReader.ReadTourneyLeftStars();
+            var tourneyRightStars = OsuMemoryReader.ReadTourneyRightStars();
+            return $"{tourneyLeftStars.ToString()}.{tourneyRightStars.ToString()}";
+
         }
         private bool IsBitSet(byte b, int pos)
         {

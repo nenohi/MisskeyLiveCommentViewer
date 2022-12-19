@@ -183,11 +183,15 @@ namespace MisskeyLiveCommentViewer
             string notagtext = Regex.Replace(Text, @"(#[a-z|A-Z]*)", "");
             if (notagtext.IndexOf("!") >= 0)
             {
-                if(notagtext.IndexOf("!np") >= 0)
+                if(notagtext.Trim().IndexOf("!np") == 0)
                 {
                     if (Osudata.IsRunning())
                     {
-                        string text = $"{(Osudata.IsPlaying()?"Playing:":"Listening:")}{Osudata.GetOsuSongString()}\r\n{Osudata.GetMapSetURL()}\r\nAR:{Osudata.GetAR()}\r\nHP:{Osudata.GetHP()}\r\nCS:{Osudata.GetOD()}\r\nOD:{Osudata.GetOD()}\r\nMods:{Osudata.ModString()}";
+                        string text = $"{(Osudata.IsPlaying()?"Playing:":"Listening:")}{Osudata.GetOsuSongString()}\r\n{Osudata.GetMapSetURL()}\r\n" +
+                            $"Stars:{Osudata.GetStars()}" +
+                            $"AR:{Osudata.GetAR()}\r\nHP:{Osudata.GetHP()}\r\n" +
+                            $"CS:{Osudata.GetOD()}\r\nOD:{Osudata.GetOD()}\r\n" +
+                            $"Mods:{Osudata.ModString()}";
                         misskey.PostNote(text, json.body.body.id);
                     }
                 }
