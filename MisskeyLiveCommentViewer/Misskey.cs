@@ -297,6 +297,30 @@ namespace MisskeyLiveCommentViewer
                 var response = await client.PostAsync(instanceurl + "/api/notes/create", content);
             }
         }
+        public async Task PostNote(string Text,string replyId)
+        {
+            if (i == String.Empty) return;
+            string txt;
+            if (string.IsNullOrEmpty(livetag))
+            {
+                txt = Text;
+            }
+            else
+            {
+                txt = $"{Text}\r\n#MisskeyLive #{livetag.Replace("ml", "ML")}\r\nhttps://live.misskey.io/{livetag.Replace("ml", "@")}";
+            }
+            Dictionary<string, string> postdata = new Dictionary<string, string>();
+            postdata.Add("text", txt);
+            postdata.Add("visibility", "home");
+            postdata.Add("i", i);
+            postdata.Add("replyId", replyId);
+            var postjson = JsonConvert.SerializeObject(postdata);
+            using (HttpClient client = new HttpClient())
+            {
+                var content = new StringContent(postjson, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(instanceurl + "/api/notes/create", content);
+            }
+        }
         public void Setting(string AppSecret,string i,string token,string instanceurl,string livetag)
         {
             this.appSecret = AppSecret;

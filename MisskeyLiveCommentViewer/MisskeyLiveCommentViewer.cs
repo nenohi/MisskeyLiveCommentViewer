@@ -22,6 +22,7 @@ namespace MisskeyLiveCommentViewer
         private ImageList ImageList = new ImageList() { ImageSize = new Size(50, 50) };
         private Bouyomichan bouyomichan = new Bouyomichan();
         private ListViewItem listViewItemtemp = new ListViewItem();
+        private Osudata Osudata = new Osudata();
         private string UserID { set; get; }
         private DispatcherTimer timer;
         private int errorcnt = 0;
@@ -180,7 +181,17 @@ namespace MisskeyLiveCommentViewer
             listViewItemtemp.SubItems.Add(json.body.body.user.name);
             listViewItemtemp.SubItems.Add(Text);
             string notagtext = Regex.Replace(Text, @"(#[a-z|A-Z]*)", "");
-
+            if (notagtext.IndexOf("!") >= 0)
+            {
+                if(notagtext.IndexOf("!np") >= 0)
+                {
+                    if (Osudata.IsRunning())
+                    {
+                        string text = $"{(Osudata.IsPlaying()?"Playing:":"Listening:")}[{Osudata.GetOsuSongString()}]({Osudata.GetMapSetURL()})";
+                        misskey.PostNote(text, json.body.body.id);
+                    }
+                }
+            }
             if (Bouyomichan.Checked)
             {
                 bouyomichan.Speak(notagtext);
