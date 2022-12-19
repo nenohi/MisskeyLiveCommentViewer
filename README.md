@@ -1,9 +1,9 @@
 # MisskeyLiveCommentViewer
-こちらのソフトウェアは[Misskey.io](https://misskey.io)にて運営されている[MisskeyLive](https://live.misskey.io/)のWindows用コメントビューアです。
+こちらのソフトウェアは[Misskey.io](https://misskey.io)にて運営されている[MisskeyLive](https://live.misskey.io/)のWindows用コメントビューアです
 
-## 利用手順
-1. UserIDにてMisskey.ioに登録されているIDを記載してください。
-2. Connectボタンを押して接続をします。
+## Used
+1. UserIDにてMisskey.ioに登録されているIDを記載してください
+2. Connectボタンを押して接続をします
 
 
 ## Bouyomichan
@@ -14,14 +14,12 @@
 
 下部にあるコンボボックスから表示したいモニターを選択してください。
 
-その後にチェックを行うとコメントがニ○ニ○動画の様に***自分の***画面上に流れます。
+その後にチェックを行うとコメントがニ○ニ○動画の様に自分の画面上に流れます。
 
 
 ## License
 
-
-
-This software includes the work that is distributed in the Apache License 2.0.
+This software is licensed under the GNU General Public Licence 3.0 licence.
 
 This Software includes Lisence Lists(NugetPackage)
 
@@ -82,3 +80,5 @@ System.Threading.Timer                        http://go.microsoft.com/fwlink/?Li
 SuperSocket.ClientEngine.Core                 http://www.apache.org/licenses/LICENSE-2.0              
 
 WebSocket4Net                                 http://www.apache.org/licenses/LICENSE-2.0            
+
+ProcessMemoryDataFinder                       https://raw.githubusercontent.com/Piotrekol/ProcessMemoryDataFinder/master/LICENSE
