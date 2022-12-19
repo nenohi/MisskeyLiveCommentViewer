@@ -48,7 +48,7 @@ namespace MisskeyLiveCommentViewer
         }
         public bool IsRunning()
         {
-            return OsuMemoryReader.GetCurrentStatus(out _) == OsuMemoryDataProvider.OsuMemoryStatus.NotRunning;
+            return OsuMemoryReader.GetCurrentStatus(out _) != OsuMemoryDataProvider.OsuMemoryStatus.NotRunning;
         }
         public string GetMapURL()
         {
