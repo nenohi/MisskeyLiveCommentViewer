@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -107,33 +108,43 @@ namespace MisskeyLiveCommentViewer
     }
     public enum Mods
     {
-        no_fail=1,
-        easy=2,
-        no_video=4,
-        hidden=8,
-        hard_rock=16,
-        sudden_death=32,
-        double_time=64,
-        relax=128,
-        half_time=256,
-        nightcore=512,
-        flashlight=1024,
-        autoplay=2048,
-        spin_out=4096,
-        relax2=8192,
-        perfect=16384,
-        key4=32768,
-        key5=65536,
-        key6=131072,
-        key7=262144,
-        key8=524288,
-        fade_in=1048576,
-        random=2097152,
+        NF=1,
+        EZ=2,
+        NV=4,
+        HD=8,
+        HR=16,
+        SD=32,
+        DT=64,
+        RX=128,
+        HT=256,
+        NC=512,
+        FL=1024,
+        AT=2048,
+        SO=4096,
+        AP=8192,
+        PF=16384,
+        [Description("4K")]
+        fourK = 32768,
+        [Description("5K")]
+        fivek=65536,
+        [Description("6K")]
+        sixk=131072,
+        [Description("7K")]
+        sevennk = 262144,
+        [Description("8K")]
+        eightk = 524288,
+        FI =1048576,
+        RD=2097152,
         last_mod=4194304,
-        key9=16777216,
-        key10=33554432,
-        key1=67108864,
-        key3=134217728,
-        key2=268435456,
+        [Description("9K")]
+        ninek = 16777216,
+        [Description("10K")]
+        tenk =33554432,
+        [Description("1K")]
+        onek =67108864,
+        [Description("3K")]
+        threek = 134217728,
+        [Description("2K")]
+        twok =268435456,
     }
 }
