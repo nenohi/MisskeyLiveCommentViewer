@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.WebSockets;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,11 +34,15 @@ namespace MisskeyLiveCommentViewer
         }
         public void ConnectAsync()
         {
+            Connect1();
+            Connect2();
+        }
+        public void Connect1()
+        {
             if (WebSocket != null)
             {
                 try
                 {
-
                     WebSocket.MessageReceived -= WebSocket_MessageReceived;
                     WebSocket.Error -= WebSocket_Error;
                     WebSocket.Opened -= WebSocket_Opened;
@@ -45,39 +50,53 @@ namespace MisskeyLiveCommentViewer
                 }
                 finally
                 {
-                    WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                    WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming",
+                        sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
                     WebSocket.MessageReceived += WebSocket_MessageReceived;
                     WebSocket.Error += WebSocket_Error;
                     WebSocket.Opened += WebSocket_Opened;
 
                 }
+            }
+            else
+            {
+                WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming",
+                    sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
+                WebSocket.MessageReceived += WebSocket_MessageReceived;
+                WebSocket.Error += WebSocket_Error;
+                WebSocket.Opened += WebSocket_Opened;
+            }
+            WebSocket.Open();
+        }
+        public void Connect2()
+        {
+            if (WebSocket1 != null)
+            {
                 try
                 {
                     WebSocket1.MessageReceived -= WebSocket_MessageReceived;
-                    WebSocket1.Error -= WebSocket_Error;
+                    WebSocket1.Error -= WebSocket1_Error;
                     WebSocket1.Opened -= WebSocket_Opened;
                     WebSocket1.Close();
                 }
                 finally
                 {
-                    WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                    WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming",
+                        sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
+
                     WebSocket1.MessageReceived += WebSocket_MessageReceived;
-                    WebSocket1.Error += WebSocket_Error;
+                    WebSocket1.Error += WebSocket1_Error;
                     WebSocket1.Opened += WebSocket_Opened;
                 }
             }
             else
             {
-                WebSocket = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
-                WebSocket.MessageReceived += WebSocket_MessageReceived;
-                WebSocket.Error += WebSocket_Error;
-                WebSocket.Opened += WebSocket_Opened;
-                WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming");
+                WebSocket1 = new WebSocket4Net.WebSocket("wss://misskey.io/streaming",
+                    sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
                 WebSocket1.MessageReceived += WebSocket_MessageReceived;
-                WebSocket1.Error += WebSocket_Error;
+                WebSocket1.Error += WebSocket1_Error;
                 WebSocket1.Opened += WebSocket_Opened;
             }
-            WebSocket.Open();
             WebSocket1.Open();
         }
 
@@ -95,7 +114,12 @@ namespace MisskeyLiveCommentViewer
         private void WebSocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
         {
             Debug.WriteLine(e.Exception.Message);
-            ConnectAsync();
+            Connect1();
+        }
+        private void WebSocket1_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e)
+        {
+            Debug.WriteLine(e.Exception.Message);
+            Connect2();
         }
 
         private void WebSocket_MessageReceived(object sender, WebSocket4Net.MessageReceivedEventArgs e)
